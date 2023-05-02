@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js" defer></script>
+        <title> Calculator </title>
+    </head>
+    <body>
+        <header>
+            <h1> Calculator </h1>
+        </header>
+        <main>
+            <section id="help">
+                <button class="help-button"> ? </button>
+                <aside class="instruction">
+                    <h2> Welcome to Calculator App </h2>
+                    <h3> Features: </h3>
+                    <ul>
+                        <li> (+) Addition </li>
+                        <li> (-) Substraction </li>
+                        <li> (*) Multiplication </li>
+                        <li> (/) Division </li>
+                    </ul>
+                    <h3> How to use: </h3>
+                    <div>
+                        <aside>
+                            <h4> Using interface: </h4> 
+                            <ol>
+                                <li> Input your first number by pressing the number buttons (0-9) on the interface </li>
+                                <li> Choose your operand by pressing the operator button (+, -, *, /) on the interface </li>
+                                <li> Input your second number by pressing the number buttons (0-9) on the interface </li>
+                                <li> Press the equals button (=) on the interface to get the results </li>
+                            </ol>
+                        </aside>
+                        <aside>
+                            <h4> Using keyboard: </h4> 
+                            <ol>
+                                <li> Input your first number by pressing the number buttons (0-9) on your keyboard </li>
+                                <li> Choose your operand by pressing the operator button (+, -, *, /) on your keyboard </li>
+                                <li> Input your second number by pressing the number buttons (0-9) on your keyboard </li>
+                                <li> Press the equals button (=) on your keyboard to get the results </li>
+                            </ol>
+                        </aside>
+                    </div>
+                </aside>
+            </section>
+            <section id="calculator">
+                <div class="calculator-container">
+                    <div class="display-container">
+                        <div class="display">
+                            <p id="text-display"> 0 </p>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <div class="number-container">
+                            <div class="row">
+                                <button class="number" id="button7"> 7 </button>
+                                <button class="number" id="button8"> 8 </button>
+                                <button class="number" id="button9"> 9 </button>
+                            </div>
+                            <div class="row">
+                                <button class="number" id="button4"> 4 </button>
+                                <button class="number" id="button5"> 5 </button>
+                                <button class="number" id="button6"> 6 </button>
+                            </div>
+                            <div class="row">
+                                <button class="number" id="button1"> 1 </button>
+                                <button class="number" id="button2"> 2 </button>
+                                <button class="number" id="button3"> 3 </button>
+                            </div>
+                            <div class="row">
+                                <button class="number" id="button0"> 0 </button>
+                                <button class="number" id="button00"> 00 </button>
+                                <button class="number" id="button-dot"> . </button>
+                            </div>
+                        </div>
+                        <div class="non-number-container">
+                            <button class="operand" id="button-clr"> CLR </button>
+                            <button class="operand" id="button-x"> &times </button>
+                            <button class="operand" id="button-plus"> + </button>
+                        </div>
+                        <div class="non-number-container">
+                            <button class="operand" id="button-ac"> AC </button>
+                            <button class="operand" id="button-divide"> &#247; </button>
+                            <button class="operand" id="button-minus"> - </button>
+                            <button class="operand" id="button-equals"> = </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <h3> &#169;Copyright 2023. All rights reserved.</h3>
+        </footer>
+    </body>
+</html>
