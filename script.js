@@ -40,7 +40,6 @@ help_button.addEventListener('click', () => showHelp());
 
 const changeDisplay = (text) => {
     let display_number = document.querySelector("#text-display");
-    console.log(text.length )
     if (text.length >= 18) {
         if (isDecimal(text) && findDotLocation(text) == 17) {
             text = text.slice(0, 17);
@@ -81,8 +80,12 @@ const findDotLocation = (text) => {
 const number_button = document.querySelectorAll("button.number");
 number_button.forEach((button) => {
     button.addEventListener('click', (e) => {
-        console.log(first_number_value);
-        if (first_number_active === true) {
+        if (result_active === true) {
+            result_active = false;
+            first_number_active = true;
+            first_number_value = e.target.innerText;
+            changeDisplay(first_number_value);
+        } else if (first_number_active === true) {
             if (e.target.innerText == '.') {
                 if (!isDecimal(first_number_value)) {
                     first_number_value += e.target.innerText;
@@ -99,12 +102,47 @@ number_button.forEach((button) => {
             operand_active = false;
             second_number_active = true;
             second_number_value = e.target.innerText;
-            changeDisplay(second)
-        } else {
-            second_number_value 
+            changeDisplay(second_number_value);
+        } else if (second_number_active === true) {
+            second_number_value += e.target.innerText;
+            changeDisplay(second_number_value);
         }
-        console.log(e.target.innerText);
-        console.log(first_number_value);
-        console.log('');
     });
 });
+
+const non_number_button = document.querySelectorAll("button.number");
+non_number_button.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        if (first_number_active === true) {
+            first_number_active = false;
+            operand_active = true;
+        } else if (operand_active === true) {
+            
+        } else if (second_number_active === true) {
+
+        } else if (result_active === true) {
+
+        }
+    })
+})
+
+const addition = (number1, number2) => { number1 + number2 }
+const substract = (number1, number2) => { number1 - number2 }
+const multiplication = (number1, number2) => { number1 * number2 }
+const divide = (number1, number2) => { number1 / number2 }
+
+const operate = (number1, operand, number2) => {
+    switch (operand) {
+        case '+':
+            return addition(number1, number2);
+    
+        case '-':
+            return substract(number1, number2);
+
+        case '*':
+            return multiplication(number1, number2);
+
+        case '/':
+            return divide(number1, number2);
+    }
+}
