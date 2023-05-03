@@ -65,6 +65,7 @@ main {
 #text-display {
     margin: 0;
     font-size: 30px;
+    letter-spacing: 2px;
 }
 
 .button-container {
@@ -119,4 +120,3 @@ footer {
     width: 100%;
     bottom: 0;
 }
-
