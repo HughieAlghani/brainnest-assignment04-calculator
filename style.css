@@ -12,10 +12,6 @@ header h1 {
     margin: 0;
 }
 
-main {
-    height: 80vh;
-}
-
 .instruction {
     background-color: white;
     display: none;
@@ -29,7 +25,7 @@ main {
 }
 
 #calculator {
-    height: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,7 +33,8 @@ main {
 
 .calculator-container {
     background-color: rgb(217, 217, 217);
-    width: 375px;
+    width: auto;
+    max-width: 95%;
     border-radius: 10px;
 }
 
@@ -64,21 +61,21 @@ main {
 
 #text-display {
     margin: 0;
-    font-size: 30px;
+    font-size: 2em;
     letter-spacing: 2px;
 }
 
 .button-container {
-    padding: 10px 5px;
+    padding: 10px;
     display: flex;
     justify-content: space-evenly;
 }
 
 .button-container button {
-    width: 65px;
+    width: 2em;
     height: 40px;
     margin: 5px 0;
-    font-size: 30px;
+    font-size: 1.5em;
     border-radius: 5px;
 }
 
@@ -100,7 +97,8 @@ main {
 }
 
 #button-clr, #button-ac {
-    font-size: 25px;
+    font-size: 1em;
+    width: 3em;
 }
 
 .number-container {
@@ -110,13 +108,5 @@ main {
 .non-number-container {
     display: flex;
     flex-direction: column;
-}
-
-footer {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    bottom: 0;
+    margin-right: 2px;
 }
