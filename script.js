@@ -40,7 +40,42 @@ help_button.addEventListener('click', () => showHelp());
 
 const changeDisplay = (text) => {
     let display_number = document.querySelector("#text-display");
+    console.log(text.length )
+    if (text.length >= 18) {
+        if (isDecimal(text) && findDotLocation(text) == 17) {
+            text = text.slice(0, 17);
+            text += 'd';
+        } else if (isDecimal(text) && findDotLocation(text) < 17) {
+            dot_location = findDotLocation(text);
+            behind_dot_remain = 18 - dot_location;
+            text = (+text).toFixed(behind_dot_remain).toString();
+            text = text.slice(0, 18);
+        } else {
+            text = text.slice(0,17);
+            text += '_';
+        }
+    }
     display_number.innerText = text;
+}
+
+const isDecimal = (text) => {
+    let is_dot_found = false;
+    text.split('').forEach((char) => {
+        if (char == ".") {
+            is_dot_found = true;
+        }
+    })
+    return is_dot_found;
+}
+
+const findDotLocation = (text) => {
+    let dot_location = -1;
+    for (i = 0; i < text.length; i++) {
+        if (text[i] == ".") {
+            dot_location = i;
+        }
+    }
+    return dot_location;
 }
 
 const number_button = document.querySelectorAll("button.number");
@@ -48,10 +83,16 @@ number_button.forEach((button) => {
     button.addEventListener('click', (e) => {
         console.log(first_number_value);
         if (first_number_active === true) {
-            if (first_number_value == '0') {
-                first_number_value = e.target.innerText;
+            if (e.target.innerText == '.') {
+                if (!isDecimal(first_number_value)) {
+                    first_number_value += e.target.innerText;
+                }
             } else {
-                first_number_value += e.target.innerText;
+                if (first_number_value == '0') {
+                    first_number_value = e.target.innerText;
+                } else {
+                    first_number_value += e.target.innerText;
+                }
             }
             changeDisplay(first_number_value);
         } else if (operand_active === true) {
