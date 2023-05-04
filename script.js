@@ -50,7 +50,13 @@ const changeDisplay = (number) => {
     if (number.length >= 10) {
         number = shortenDisplayNumber(number);
     }
-    display_number.innerText = number;
+    display_number.innerText = '';
+    // setTimeout(() => {
+    //     display_number.innerText = 'hee';
+    // }, 500);
+    setTimeout(() => {
+        display_number.innerText = number;
+    }, 100);
 }
 
 const isDecimal = (number) => {
@@ -74,10 +80,15 @@ const findDotLocation = (number) => {
 }
 
 const numberButtonClicked = (number) => {
+    console.log(calculate_data)
     if (calculate_data.result.active === true) {
         calculate_data.result.active = false;
         calculate_data.first_number.active = true;
-        calculate_data.first_number.value = number;
+        if (number == '.') {
+            calculate_data.first_number.value = '0.'
+        } else {
+            calculate_data.first_number.value = number;
+        }
         changeDisplay(calculate_data.first_number.value);
     } else if (calculate_data.first_number.active === true) {
         if (number == '.') {
@@ -93,11 +104,16 @@ const numberButtonClicked = (number) => {
                 calculate_data.first_number.value += number;
             }
         }
+        calculate_data.second_number.value = '0';
         changeDisplay(calculate_data.first_number.value);
     } else if (calculate_data.operand.active === true && number != '00') {
         calculate_data.operand.active = false;
         calculate_data.second_number.active = true;
-        calculate_data.second_number.value = number;
+        if (number == '.') {
+            calculate_data.second_number.value += number;
+        } else {
+            calculate_data.second_number.value = number;
+        }
         changeDisplay(calculate_data.second_number.value);
     } else if (calculate_data.second_number.active === true) {
         if (number == '.') {
