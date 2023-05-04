@@ -29,33 +29,35 @@ const showHelp = () => {
 const help_button = document.querySelector("button.help-button");
 help_button.addEventListener('click', () => showHelp());
 
-const shortenDisplayNumber = (text) => {
-    if (isDecimal(text) && findDotLocation(text) == 10) {
-        text = text.slice(0, 10);
-        text += 'd';
-    } else if (isDecimal(text) && findDotLocation(text) < 10) {
-        const dot_location = findDotLocation(text);
+const shortenDisplayNumber = (number) => {
+    console.log(number);
+    if (isDecimal(number) && findDotLocation(number) == 10) {
+        console.log('case1')
+        number = number.slice(0, 9);
+        number += 'd';
+    } else if (isDecimal(number) && findDotLocation(number) < 10) {
+        const dot_location = findDotLocation(number);
         const behind_dot_remain = 9 - dot_location;
-        text = (+text).toFixed(behind_dot_remain).toString();
-        text = text.slice(0, 10);
+        number = (+number).toFixed(behind_dot_remain).toString();
+        number = number.slice(0, 10);
     } else {
-        text = text.slice(0,9);
-        text += '_';
+        number = number.slice(0,9);
+        number += '_';
     }
-    return text;
+    return number;
 }
 
-const changeDisplay = (text) => {
+const changeDisplay = (number) => {
     const display_number = document.querySelector("#text-display");
-    if (text.length >= 10) {
-        text = shortenDisplayNumber(text);
+    if (number.length >= 10) {
+        number = shortenDisplayNumber(number);
     }
-    display_number.innerText = text;
+    display_number.innerText = number;
 }
 
-const isDecimal = (text) => {
+const isDecimal = (number) => {
     let is_dot_found = false;
-    text.split('').forEach((char) => {
+    number.split('').forEach((char) => {
         if (char == ".") {
             is_dot_found = true;
         }
@@ -63,11 +65,11 @@ const isDecimal = (text) => {
     return is_dot_found;
 }
 
-const findDotLocation = (text) => {
+const findDotLocation = (number) => {
     let dot_location = -1;
-    for (i = 0; i < text.length; i++) {
-        if (text[i] == ".") {
-            dot_location = i;
+    for (i = 0; i < number.length; i++) {
+        if (number[i] == ".") {
+            dot_location = i + 1;
         }
     }
     return dot_location;
@@ -244,11 +246,11 @@ const operate = () => {
     }
 }
 
-const deleteLastDigit = (text) => {
-    if (text.length == 1) {
+const deleteLastDigit = (number) => {
+    if (number.length == 1) {
         return '0';
     }
-    return text.slice(0, text.length - 1);
+    return number.slice(0, number.length - 1);
 }
 
 const resetCalculateData = () => {
