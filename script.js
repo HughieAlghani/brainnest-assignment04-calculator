@@ -229,17 +229,15 @@ const operate = () => {
         return 'Nope';
     }
 
-    number1 = +number1;
-    number2 = +number2;
     switch (operand) {
         case '+':
-            return addition(number1, number2).toString();
+            return addition(+number1, +number2).toString();
     
         case '-':
-            return substract(number1, number2).toString();
+            return substract(+number1, +number2).toString();
 
         case '*':
-            return multiplication(number1, number2).toString();
+            return multiplication(+number1, +number2).toString();
 
         case '/':
             return divide(number1, number2).toString();
@@ -293,7 +291,7 @@ system_button.forEach((button) => {
 })
 
 window.addEventListener('keydown', (e) => {
-    if (e.key.match(/(\d|\.)/)) {
+    if (e.key.match(/(\b\d\b|\.)/)) {
         numberButtonClicked(e.key);
     } else if (e.key.match(/(\+|\-|\*|\/)/)) {
         operatorClicked(e.key);
