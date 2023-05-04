@@ -18,7 +18,7 @@ let calculate_data = {
 }
 
 const showHelp = () => {
-    let help_text = document.querySelector(".instruction").style;
+    const help_text = document.querySelector(".instruction").style;
     if (help_text.display == "block") {
         help_text.display = "none";
     } else {
@@ -29,24 +29,28 @@ const showHelp = () => {
 const help_button = document.querySelector("button.help-button");
 help_button.addEventListener('click', () => showHelp());
 
+const shortenDisplayNumber = (text) => {
+    if (isDecimal(text) && findDotLocation(text) == 10) {
+        text = text.slice(0, 10);
+        text += 'd';
+    } else if (isDecimal(text) && findDotLocation(text) < 10) {
+        const dot_location = findDotLocation(text);
+        const behind_dot_remain = 9 - dot_location;
+        text = (+text).toFixed(behind_dot_remain).toString();
+        text = text.slice(0, 10);
+    } else {
+        text = text.slice(0,9);
+        text += '_';
+    }
+    return text;
+}
+
 const changeDisplay = (text) => {
-    let display_number = document.querySelector("#text-display");
+    const display_number = document.querySelector("#text-display");
     if (text.length >= 10) {
-        if (isDecimal(text) && findDotLocation(text) == 10) {
-            text = text.slice(0, 10);
-            text += 'd';
-        } else if (isDecimal(text) && findDotLocation(text) < 10) {
-            dot_location = findDotLocation(text);
-            behind_dot_remain = 9 - dot_location;
-            text = (+text).toFixed(behind_dot_remain).toString();
-            text = text.slice(0, 10);
-        } else {
-            text = text.slice(0,9);
-            text += '_';
-        }
+        text = shortenDisplayNumber(text);
     }
     display_number.innerText = text;
-    console.log(calculate_data);
 }
 
 const isDecimal = (text) => {
@@ -69,52 +73,106 @@ const findDotLocation = (text) => {
     return dot_location;
 }
 
+const numberButtonClicked = (number) => {
+    if (calculate_data.result.active === true) {
+        calculate_data.result.active = false;
+        calculate_data.first_number.active = true;
+        calculate_data.first_number.value = number;
+        changeDisplay(calculate_data.first_number.value);
+    } else if (calculate_data.first_number.active === true) {
+        if (number == '.') {
+            if (!isDecimal(calculate_data.first_number.value)) {
+                calculate_data.first_number.value += number;
+            }
+        } else {
+            if (calculate_data.first_number.value == '0') {
+                if (number != '00') {
+                    calculate_data.first_number.value = number;
+                }
+            } else {
+                calculate_data.first_number.value += number;
+            }
+        }
+        changeDisplay(calculate_data.first_number.value);
+    } else if (calculate_data.operand.active === true && number != '00') {
+        calculate_data.operand.active = false;
+        calculate_data.second_number.active = true;
+        calculate_data.second_number.value = number;
+        changeDisplay(calculate_data.second_number.value);
+    } else if (calculate_data.second_number.active === true) {
+        if (number == '.') {
+            if (!isDecimal(calculate_data.second_number.value)) {
+                calculate_data.second_number.value += number;
+            }
+        } else {
+            if (calculate_data.second_number.value == '0') {
+                if (number != '00') {
+                    calculate_data.second_number.value = number;
+                }
+            } else {
+                calculate_data.second_number.value += number;
+            }
+        }
+        changeDisplay(calculate_data.second_number.value);
+    }
+}
+
 const number_button = document.querySelectorAll("button.number");
 number_button.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (calculate_data.result.active === true) {
-            calculate_data.result.active = false;
-            calculate_data.first_number.active = true;
-            calculate_data.first_number.value = e.target.innerText;
-            changeDisplay(calculate_data.first_number.value);
-        } else if (calculate_data.first_number.active === true) {
-            if (e.target.innerText == '.') {
-                if (!isDecimal(calculate_data.first_number.value)) {
-                    calculate_data.first_number.value += e.target.innerText;
-                }
-            } else {
-                if (calculate_data.first_number.value == '0') {
-                    if (e.target.innerText != '00') {
-                        calculate_data.first_number.value = e.target.innerText;
-                    }
-                } else {
-                    calculate_data.first_number.value += e.target.innerText;
-                }
-            }
-            changeDisplay(calculate_data.first_number.value);
-        } else if (calculate_data.operand.active === true && e.target.innerText != '00') {
-            calculate_data.operand.active = false;
-            calculate_data.second_number.active = true;
-            calculate_data.second_number.value = e.target.innerText;
-            changeDisplay(calculate_data.second_number.value);
-        } else if (calculate_data.second_number.active === true) {
-            if (e.target.innerText == '.') {
-                if (!isDecimal(calculate_data.second_number.value)) {
-                    calculate_data.second_number.value += e.target.innerText;
-                }
-            } else {
-                if (calculate_data.second_number.value == '0') {
-                    if (e.target.innerText != '00') {
-                        calculate_data.second_number.value = e.target.innerText;
-                    }
-                } else {
-                    calculate_data.second_number.value += e.target.innerText;
-                }
-            }
-            changeDisplay(calculate_data.second_number.value);
-        }
+        const number = e.target.innerText;
+        numberButtonClicked(number);
     });
 });
+
+const operatorClicked = (operator) => {
+    if (calculate_data.first_number.active === true) {
+        calculate_data.first_number.active = false;
+        calculate_data.operand.active = true;
+        calculate_data.operand.value = operator;
+    } else if (calculate_data.operand.active === true) {
+        calculate_data.operand.value = operator;
+    } else if (calculate_data.second_number.active === true) {
+        calculate_data.second_number.active = false;
+        calculate_data.operand.active = true;
+        calculate_data.result.value = operate();
+        calculate_data.first_number.value = calculate_data.result.value;
+        changeDisplay(calculate_data.result.value);
+        calculate_data.operand.value = operator;
+    } else if (calculate_data.result.active === true) {
+        calculate_data.result.active = false;
+        calculate_data.operand.active = true;
+        calculate_data.operand.value = operator;
+    }
+}
+
+const getResult = () => {
+    if (calculate_data.first_number.active === true) {
+        calculate_data.first_number.active = false;
+        calculate_data.result.active = true;
+        calculate_data.result.value = calculate_data.first_number.value;
+        changeDisplay(calculate_data.result.value);
+        calculate_data.operand.value = '+';
+        calculate_data.second_number.value = '0';
+    } else if (calculate_data.operand.active === true) {
+        calculate_data.first_number.active = false;
+        calculate_data.result.active = true;
+        calculate_data.result.value = calculate_data.first_number.value;
+        changeDisplay(calculate_data.result.value);
+        calculate_data.operand.value = '+';
+        calculate_data.second_number.value = '0';
+    } else if (calculate_data.second_number.active === true) {
+        calculate_data.second_number.active = false;
+        calculate_data.result.active = true;
+        calculate_data.result.value = operate();
+        calculate_data.first_number.value = calculate_data.result.value;
+        changeDisplay(calculate_data.result.value);
+    } else if (calculate_data.result.active === true) {
+        calculate_data.result.value = operate();
+        calculate_data.first_number.value = calculate_data.result.value;
+        changeDisplay(calculate_data.result.value);
+    }
+}
 
 const operand_button = document.querySelectorAll("button.operand");
 operand_button.forEach((button) => {
@@ -139,50 +197,9 @@ operand_button.forEach((button) => {
         }
 
         if (operand == '+' || operand == '-' || operand == '*' || operand == '/') {
-            if (calculate_data.first_number.active === true) {
-                calculate_data.first_number.active = false;
-                calculate_data.operand.active = true;
-                calculate_data.operand.value = operand;
-            } else if (calculate_data.operand.active === true) {
-                calculate_data.operand.value = operand;
-            } else if (calculate_data.second_number.active === true) {
-                calculate_data.second_number.active = false;
-                calculate_data.operand.active = true;
-                calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-                calculate_data.first_number.value = calculate_data.result.value;
-                changeDisplay(calculate_data.result.value);
-                calculate_data.operand.value = operand;
-            } else if (calculate_data.result.active === true) {
-                calculate_data.result.active = false;
-                calculate_data.operand.active = true;
-                calculate_data.operand.value = operand;
-            }
+            operatorClicked(operand);
         } else if (operand == '=') {
-            if (calculate_data.first_number.active === true) {
-                calculate_data.first_number.active = false;
-                calculate_data.result.active = true;
-                calculate_data.result.value = calculate_data.first_number.value;
-                changeDisplay(calculate_data.result.value);
-                calculate_data.operand.value = '+';
-                calculate_data.second_number.value = '0';
-            } else if (calculate_data.operand.active === true) {
-                calculate_data.first_number.active = false;
-                calculate_data.result.active = true;
-                calculate_data.result.value = calculate_data.first_number.value;
-                changeDisplay(calculate_data.result.value);
-                calculate_data.operand.value = '+';
-                calculate_data.second_number.value = '0';
-            } else if (calculate_data.second_number.active === true) {
-                calculate_data.second_number.active = false;
-                calculate_data.result.active = true;
-                calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-                calculate_data.first_number.value = calculate_data.result.value;
-                changeDisplay(calculate_data.result.value);
-            } else if (calculate_data.result.active === true) {
-                calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-                calculate_data.first_number.value = calculate_data.result.value;
-                changeDisplay(calculate_data.result.value);
-            }
+            getResult();
         }
     })
 })
@@ -203,10 +220,15 @@ const divide = (number1, number2) => {
     return number1 / number2;
 }
 
-const operate = (number1, operand, number2) => {
+const operate = () => {
+    const number1 = calculate_data.first_number.value;
+    const operand = calculate_data.operand.value;
+    const number2 = calculate_data.second_number.value;
+
     if (number1 == 'Nice Try!' || number1 == 'Nope') {
         return 'Nope';
     }
+
     number1 = +number1;
     number2 = +number2;
     switch (operand) {
@@ -271,90 +293,12 @@ system_button.forEach((button) => {
 })
 
 window.addEventListener('keydown', (e) => {
-    console.log(e.key);
     if (e.key.match(/(\d|\.)/)) {
-        if (calculate_data.result.active === true) {
-            calculate_data.result.active = false;
-            calculate_data.first_number.active = true;
-            calculate_data.first_number.value = e.key;
-            changeDisplay(calculate_data.first_number.value);
-        } else if (calculate_data.first_number.active === true) {
-            if (e.key == '.') {
-                if (!isDecimal(calculate_data.first_number.value)) {
-                    calculate_data.first_number.value += e.key;
-                }
-            } else {
-                if (calculate_data.first_number.value == '0') {
-                    calculate_data.first_number.value = e.key;
-                } else {
-                    calculate_data.first_number.value += e.key;
-                }
-            }
-            changeDisplay(calculate_data.first_number.value);
-        } else if (calculate_data.operand.active === true) {
-            calculate_data.operand.active = false;
-            calculate_data.second_number.active = true;
-            calculate_data.second_number.value = e.key;
-            changeDisplay(calculate_data.second_number.value);
-        } else if (calculate_data.second_number.active === true) {
-            if (e.key == '.') {
-                if (!isDecimal(calculate_data.second_number.value)) {
-                    calculate_data.second_number.value += e.key;
-                }
-            } else {
-                if (calculate_data.second_number.value == '0') {
-                    calculate_data.second_number.value = e.key;
-                } else {
-                    calculate_data.second_number.value += e.key;
-                }
-            }
-            changeDisplay(calculate_data.second_number.value);
-        }
+        numberButtonClicked(e.key);
     } else if (e.key.match(/(\+|\-|\*|\/)/)) {
-        if (calculate_data.first_number.active === true) {
-            calculate_data.first_number.active = false;
-            calculate_data.operand.active = true;
-            calculate_data.operand.value = e.key;
-        } else if (calculate_data.operand.active === true) {
-            calculate_data.operand.value = e.key;
-        } else if (calculate_data.second_number.active === true) {
-            calculate_data.second_number.active = false;
-            calculate_data.operand.active = true;
-            calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-            calculate_data.first_number.value = calculate_data.result.value;
-            changeDisplay(calculate_data.result.value);
-            calculate_data.operand.value = e.key;
-        } else if (calculate_data.result.active === true) {
-            calculate_data.result.active = false;
-            calculate_data.operand.active = true;
-            calculate_data.operand.value = e.key;
-        }
+        operatorClicked(e.key);
     } else if (e.key.match(/(\=|Enter)/)) {
-        if (calculate_data.first_number.active === true) {
-            calculate_data.first_number.active = false;
-            calculate_data.result.active = true;
-            calculate_data.result.value = calculate_data.first_number.value;
-            changeDisplay(calculate_data.result.value);
-            calculate_data.operand.value = '+';
-            calculate_data.second_number.value = '0';
-        } else if (calculate_data.operand.active === true) {
-            calculate_data.first_number.active = false;
-            calculate_data.result.active = true;
-            calculate_data.result.value = calculate_data.first_number.value;
-            changeDisplay(calculate_data.result.value);
-            calculate_data.operand.value = '+';
-            calculate_data.second_number.value = '0';
-        } else if (calculate_data.second_number.active === true) {
-            calculate_data.second_number.active = false;
-            calculate_data.result.active = true;
-            calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-            calculate_data.first_number.value = calculate_data.result.value;
-            changeDisplay(calculate_data.result.value);
-        } else if (calculate_data.result.active === true) {
-            calculate_data.result.value = operate(calculate_data.first_number.value, calculate_data.operand.value, calculate_data.second_number.value);
-            calculate_data.first_number.value = calculate_data.result.value;
-            changeDisplay(calculate_data.result.value);
-        }
+        getResult();
     } else if (e.key.match(/Backspace/)) {
         if (calculate_data.first_number.active === true) {
             calculate_data.first_number.value = deleteLastDigit(calculate_data.first_number.value);
