@@ -53,7 +53,7 @@ const changeDisplay = (number) => {
     display_number.innerText = '';
     setTimeout(() => {
         display_number.innerText = number;
-    }, 100);
+    }, 50);
 }
 
 const isDecimal = (number) => {
