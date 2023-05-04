@@ -30,9 +30,7 @@ const help_button = document.querySelector("button.help-button");
 help_button.addEventListener('click', () => showHelp());
 
 const shortenDisplayNumber = (number) => {
-    console.log(number);
     if (isDecimal(number) && findDotLocation(number) == 10) {
-        console.log('case1')
         number = number.slice(0, 9);
         number += 'd';
     } else if (isDecimal(number) && findDotLocation(number) < 10) {
