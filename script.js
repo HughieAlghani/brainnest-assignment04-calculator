@@ -77,7 +77,6 @@ const findDotLocation = (number) => {
 }
 
 const numberButtonClicked = (number) => {
-    console.log(calculate_data)
     if (calculate_data.result.active === true) {
         calculate_data.result.active = false;
         calculate_data.first_number.active = true;
