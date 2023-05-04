@@ -51,9 +51,6 @@ const changeDisplay = (number) => {
         number = shortenDisplayNumber(number);
     }
     display_number.innerText = '';
-    // setTimeout(() => {
-    //     display_number.innerText = 'hee';
-    // }, 500);
     setTimeout(() => {
         display_number.innerText = number;
     }, 100);
